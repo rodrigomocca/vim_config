@@ -41,8 +41,10 @@ nmap <Leader>w :w<CR>
 nmap <Leader>q :q<CR>
 nmap <Leader><Tab> :bn<CR>
 nmap <Leader><S-Tab> :bp<CR>
+nmap <Leader>d :bd<CR>
 nmap <Leader>m :find<Space>
 
+"===========CoC============
 " TextEdit might fail if hidden is not set.
 set hidden
 
@@ -196,3 +198,13 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
+nnoremap <Leader>u :OmniSharpFindUsages<CR>
+nnoremap <Leader>gd :OmniSharpGotoDefinition<CR>
+nmap <silent> oi :OmniSharpFindImplementations<CR>
+nnoremap <Leader>pd:OmniSharpPreviewDefinition<CR>
+nnoremap <Leader>run  :cd %:p:h<CR>:!dotnet run<CR>
+inoremap {      {}<Left>
+inoremap {<CR>  {<CR>}<Esc>O
+inoremap {{     {
+inoremap {}     {}
