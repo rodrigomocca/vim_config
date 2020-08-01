@@ -1,0 +1,11 @@
+let mapleader=" "
+
+nmap <Leader>s <Plug>(easymotion-s2)
+nmap <Leader>w :w<CR>
+nmap <Leader>q :q<CR>
+nmap <Leader>d :bd<CR>
+nnoremap <Leader>run  :cd %:p:h<CR>:!dotnet run<CR>
+inoremap {      {}<Left>
+inoremap {<CR>  {<CR>}<Esc>O
+inoremap {{     {
+inoremap {}     {}
