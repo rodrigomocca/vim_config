@@ -14,37 +14,36 @@ set laststatus=2
 set noshowmode
 set wildmenu
 set wildmode=list:longest,full
-
+filetype plugin indent on
+" On pressing tab, insert 2 spaces
+set expandtab
+" show existing tab with 2 spaces width
+set tabstop=2
+set softtabstop=2
+" when indenting with '>', use 2 spaces width
+set shiftwidth=2
 call plug#begin('~/.vim/plugged')
 
 " Themes
 Plug 'morhetz/gruvbox'
-
-" IDE
-Plug 'easymotion/vim-easymotion'
 Plug 'scrooloose/nerdtree'
-Plug 'christoomey/vim-tmux-navigator'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'OmniSharp/omnisharp-vim'
-
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+" IDE
 call plug#end()
 
 colorscheme gruvbox
 let g:gruvbox_contrast_dark = "hard"
-let NERDTreeQuitOnOpen=1
-
 let mapleader=" "
-
-nmap <Leader>s <Plug>(easymotion-s2)
+let NERDTreeQuitOnOpen=1
+let mapleader=" "
 nmap <Leader>nt :NERDTreeFind<CR>
-nmap <Leader>w :w<CR>
-nmap <Leader>q :q<CR>
-nmap <Leader><Tab> :bn<CR>
-nmap <Leader><S-Tab> :bp<CR>
-nmap <Leader>d :bd<CR>
-nmap <Leader>m :find<Space>
+nmap <Leader>z :FZF<CR>
+nmap <Leader>t :tabnew<CR>:FZF<CR>
+nmap <C-t> :tabNext<CR>
+nmap <C-x> :tabclose<CR>
 
-"===========CoC============
+"CoC
 " TextEdit might fail if hidden is not set.
 set hidden
 
@@ -92,14 +91,10 @@ else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-" position. Coc only does snippet and additional edit on confirm.
-" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
-if exists('*complete_info')
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
@@ -118,8 +113,10 @@ nnoremap <silent> K :call <SID>show_documentation()<CR>
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
   else
-    call CocAction('doHover')
+    execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
 
@@ -162,8 +159,15 @@ omap ic <Plug>(coc-classobj-i)
 xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
 
+" Remap <C-f> and <C-b> for scroll float windows/popups.
+" Note coc#float#scroll works on neovim >= 0.4.3 or vim >= 8.2.0750
+nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+
 " Use CTRL-S for selections ranges.
-" Requires 'textDocument/selectionRange' support of LS, ex: coc-tsserver
+" Requires 'textDocument/selectionRange' support of language server.
 nmap <silent> <C-s> <Plug>(coc-range-select)
 xmap <silent> <C-s> <Plug>(coc-range-select)
 
@@ -198,13 +202,3 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
-
-nnoremap <Leader>u :OmniSharpFindUsages<CR>
-nnoremap <Leader>gd :OmniSharpGotoDefinition<CR>
-nmap <silent> oi :OmniSharpFindImplementations<CR>
-nnoremap <Leader>pd:OmniSharpPreviewDefinition<CR>
-nnoremap <Leader>run  :cd %:p:h<CR>:!dotnet run<CR>
-inoremap {      {}<Left>
-inoremap {<CR>  {<CR>}<Esc>O
-inoremap {{     {
-inoremap {}     {}
