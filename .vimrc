@@ -30,6 +30,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'neoclide/coc.nvim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'jiangmiao/auto-pairs'
+Plug 'tpope/vim-commentary'
 " IDE
 call plug#end()
 
