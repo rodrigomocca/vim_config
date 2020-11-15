@@ -39,6 +39,9 @@ let g:gruvbox_contrast_dark = "hard"
 let mapleader=" "
 let NERDTreeQuitOnOpen=1
 let mapleader=" "
+nmap <Leader>w :w<CR>
+nmap <Leader>q :q<CR>
+nmap <Leader>Q :wq<CR>
 nmap <Leader>nt :NERDTreeFind<CR>
 nmap <Leader>z :FZF<CR>
 nmap <Leader>t :tabnew<CR>:FZF<CR>
