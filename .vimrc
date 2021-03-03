@@ -14,6 +14,9 @@ set laststatus=2
 set noshowmode
 set wildmenu
 set wildmode=list:longest,full
+set nohlsearch
+set noswapfile
+set noerrorbells
 filetype plugin indent on
 " On pressing tab, insert 2 spaces
 set expandtab
@@ -37,15 +40,23 @@ call plug#begin('~/.vim/plugged')
  Plug 'HerringtonDarkholme/yats.vim'
  Plug 'maxmellon/vim-jsx-pretty'
  Plug 'vim-scripts/indentpython.vim'
+ Plug 'vim-airline/vim-airline'
+ Plug 'vim-airline/vim-airline-themes' 
  Plug 'puremourning/vimspector'
-
  Plug 'OmniSharp/omnisharp-vim'
+
 call plug#end()
 
 let g:coc_global_extensions = ['coc-tslint-plugin', 'coc-tsserver', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-python']  " list of CoC extensions needed
 let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
 
 " packadd! vimspector
+if (has("nvim"))
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
+if (has("termguicolors"))
+  set termguicolors
+endif
 
 colorscheme gruvbox
 let g:gruvbox_contrast_dark = "hard"
@@ -61,6 +72,10 @@ nmap <Leader>t :tabnew<CR>:FZF<CR>
 nmap <C-t> :tabNext<CR>
 nmap <C-x> :tabclose<CR>
 nmap <leader>b :! dotnet build<CR>
+
+nmap <C-j> :bn<CR>
+nmap <C-k> :bp<CR>
+nmap <C-l> :buffers<CR>
 
 "Debugger remaps
 nnoremap <leader>dd :call vimspector#Launch()<CR>
