@@ -37,9 +37,15 @@ call plug#begin('~/.vim/plugged')
  Plug 'HerringtonDarkholme/yats.vim'
  Plug 'maxmellon/vim-jsx-pretty'
  Plug 'vim-scripts/indentpython.vim'
+ Plug 'puremourning/vimspector'
+
+ Plug 'OmniSharp/omnisharp-vim'
 call plug#end()
 
-let g:coc_global_extensions = ['coc-tslint-plugin', 'coc-tsserver', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-pyright']  " list of CoC extensions needed
+let g:coc_global_extensions = ['coc-tslint-plugin', 'coc-tsserver', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-python']  " list of CoC extensions needed
+let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
+
+" packadd! vimspector
 
 colorscheme gruvbox
 let g:gruvbox_contrast_dark = "hard"
@@ -54,6 +60,23 @@ nmap <Leader>z :FZF<CR>
 nmap <Leader>t :tabnew<CR>:FZF<CR>
 nmap <C-t> :tabNext<CR>
 nmap <C-x> :tabclose<CR>
+nmap <leader>b :! dotnet build<CR>
+
+"Debugger remaps
+nnoremap <leader>dd :call vimspector#Launch()<CR>
+nnoremap <leader>dc :call GotoWindow(g:vimspector_session_windows.code)<CR>
+nnoremap <leader>dt :call GotoWindow(g:vimspector_session_windows.tagpage)<CR>
+nnoremap <leader>dv :call GotoWindow(g:vimspector_session_windows.variables)<CR>
+nnoremap <leader>dw :call GotoWindow(g:vimspector_session_windows.watches)<CR>
+nnoremap <leader>ds :call GotoWindow(g:vimspector_session_windows.stack_trace)<CR>
+nnoremap <leader>do :call GotoWindow(g:vimspector_session_windows.output)<CR>
+nnoremap <leader>de :call vimspector#Reset()<CR>
+
+nmap <leader>dl <Plug>VimspectorStepInto
+nmap <leader>dj <Plug>VimspectorStepOver
+nmap <leader>dk <Plug>VimspectorStepOver
+nmap <leader>d_ <Plug>VimspectorRestart
+nnoremap <leader>d<space> :call vimspector#Continue()<CR>
 
 "CoC
 " TextEdit might fail if hidden is not set.
@@ -141,6 +164,7 @@ nmap <leader>rn <Plug>(coc-rename)
 " Formatting selected code.
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f <Plug>OmniSharpCodeFormat
 
 augroup mygroup
   autocmd!
